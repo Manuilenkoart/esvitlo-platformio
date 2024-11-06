@@ -1,6 +1,6 @@
 # setup project
 
->create env.h file with structure
+>create src/env_m.h file with structure
 
 ```sh
 #ifndef  WIFI_CONFIG
