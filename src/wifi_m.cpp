@@ -83,7 +83,7 @@ void checkRSSI()
   if (WiFi.status() != WL_CONNECTED)
     return;
 
-  long rssi = WiFi.RSSI();
+  int rssi = WiFi.RSSI();
   Serial.print("Wi-Fi Signal Strength (RSSI): ");
   Serial.print(rssi);
   Serial.println(" dBm");

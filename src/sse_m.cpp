@@ -24,7 +24,8 @@ void SSESetup()
     if (client->lastId()) {
       Serial.printf("Client reconnected! Last message ID it got is: %u\n", client->lastId());
     }
-    String message = "{ \"name\":\"connection\", \"value\":\"" + String(client->lastId()) + "\", \"timestamp\":\"" + String(millis()) + "\" }";
+    const char *voltage = hasPower ? "ON" : "OFF";
+    String message = "{ \"name\":\"connection\", \"id\":\"" + String(client->lastId()) + "\", \"voltage\":\"" + voltage + "\", \"timestamp\":\"" + String(millis()) + "\" }";
     client->send(message.c_str(), NULL, idMessage, 1000);
     idMessage++; });
 
@@ -62,7 +63,8 @@ void handleSSEPing()
 {
   ticker.attach(1, []()
                 {
-    String message = "{ \"name\":\"ping\", \"value\":\"" + String(idMessage) + "\", \"hasPower\":\"" + String(hasPower) + "\", \"timestamp\":\"" + String(millis()) + "\" }";
+    const char *voltage = hasPower ? "ON" : "OFF";
+    String message = "{ \"name\":\"ping\", \"id\":\"" + String(idMessage) + "\", \"voltage\":\"" + voltage + "\", \"timestamp\":\"" + String(millis()) + "\" }";
     events.send(message.c_str(), "ping", idMessage, 1000);
     idMessage++; });
 }
