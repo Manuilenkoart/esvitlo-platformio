@@ -98,10 +98,13 @@ void checkRSSI()
 void wifiSetup()
 {
   Serial.println("WiFi start");
+  // 1. if (!ssid || !password) => softAp mode => esp scan network => user connect to esp => get available router names
+  // 2. if wifi sta couldn`t connect to router => app show error and wifi softAp on => p.1
+  // 3. 
   
   connectToWiFi();
 
-  if (WiFi.status() != WL_CONNECTED)
+  if (WiFi.status() != WL_CONNECTED) // && (!ssid || !password)
   {
     startAPMode();
   }
