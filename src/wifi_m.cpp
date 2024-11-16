@@ -12,7 +12,7 @@ const char *passwordAP = APPSK;
 
 const char *mDnsName = M_DNS_NAME;
 
-const int retryDelay = 5000; // Delay between retries
+const int retryDelay = 3000; // Delay between retries
 const int maxRetries = 30;   // Maximum connection retries
 unsigned long previousMillis = 0;
 const unsigned long interval = 10000; // Interval for checking connection status
