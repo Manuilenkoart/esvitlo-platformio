@@ -1,5 +1,5 @@
-#ifndef SSE_m
-#define SSE_m
+#ifndef server_m
+#define server_m
 
 void SSESetup();
 void setDataSEE(bool isHigh);

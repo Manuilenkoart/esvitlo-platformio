@@ -14,6 +14,7 @@ unsigned long idMessage = 0;
 void addDefaultHeaders();
 void handleOptionsRequest(AsyncWebServerRequest *request);
 void handleSSEPing();
+void handleReset(AsyncWebServerRequest *request);
 
 void SSESetup()
 {
@@ -32,6 +33,8 @@ void SSESetup()
   server.addHandler(&events);
 
   server.on("/events", HTTP_OPTIONS, handleOptionsRequest);
+
+  server.on("/reset", HTTP_GET, handleReset);
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     {
@@ -72,4 +75,10 @@ void handleSSEPing()
 void setDataSEE(bool isHigh)
 {
   hasPower = isHigh;
+}
+
+void handleReset(AsyncWebServerRequest *request)
+{
+  request->send(200, "text/plain", "reset ok");
+  ESP.restart();
 }

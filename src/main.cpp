@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include "wifi_m.h"
-#include "SSE_m.h"
+#include "server_m.h"
 #include "power_m.h"
 #include "ota_m.h"
 
