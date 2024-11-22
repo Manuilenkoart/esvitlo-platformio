@@ -3,5 +3,6 @@
 
 void boardLedSetup();
 void boardLedUpdate(bool isOn);
+void boardLedBlinkforSetup(int attemptCounter, int interval);
 
 #endif
