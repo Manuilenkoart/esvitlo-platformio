@@ -13,8 +13,6 @@ void IRAM_ATTR interruptChange()
 
 void powerManagementSetup()
 {
-  boardLedSetup();
-
   pinMode(checkVoltagePin, INPUT);
 
   hasVoltageVolatile = digitalRead(checkVoltagePin);

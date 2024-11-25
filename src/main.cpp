@@ -2,6 +2,7 @@
 
 #include "wifi_m.h"
 #include "server_m.h"
+#include "board_led_m.h"
 #include "power_m.h"
 #include "ota_m.h"
 
@@ -19,6 +20,7 @@ void setup()
 
   wifiSetup();
   SSESetup();
+  boardLedSetup();
   powerManagementSetup();
   otaSetup();
 }
