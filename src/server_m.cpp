@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
 #include <Ticker.h>
-
+#include "LittleFS.h"
 #include "env_m.h"
 
 AsyncWebServer server(PORT_HTTP);
@@ -15,22 +15,17 @@ void addDefaultHeaders();
 void handleOptionsRequest(AsyncWebServerRequest *request);
 void handleSSEPing();
 void handleReset(AsyncWebServerRequest *request);
+void initLittleFS();
 
 void SSESetup()
 {
+  initLittleFS();
   addDefaultHeaders();
 
-  events.onConnect([](AsyncEventSourceClient *client)
-                   {
-    if (client->lastId()) {
-      Serial.printf("Client reconnected! Last message ID it got is: %u\n", client->lastId());
-    }
-    const char *voltage = hasPower ? "ON" : "OFF";
-    String message = "{ \"name\":\"connection\", \"id\":\"" + String(client->lastId()) + "\", \"voltage\":\"" + voltage + "\", \"timestamp\":\"" + String(millis()) + "\" }";
-    client->send(message.c_str(), NULL, idMessage, 1000);
-    idMessage++; });
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(LittleFS, "/index.html", "text/html"); });
 
-  server.addHandler(&events);
+  server.serveStatic("/", LittleFS, "/");
 
   server.on("/events", HTTP_OPTIONS, handleOptionsRequest);
 
@@ -43,6 +38,18 @@ void SSESetup()
     } else {
       request->send(404);
     } });
+
+  server.addHandler(&events);
+
+  events.onConnect([](AsyncEventSourceClient *client)
+                   {
+    if (client->lastId()) {
+      Serial.printf("Client reconnected! Last message ID it got is: %u\n", client->lastId());
+    }
+    const char *voltage = hasPower ? "ON" : "OFF";
+    String message = "{ \"name\":\"connection\", \"id\":\"" + String(client->lastId()) + "\", \"voltage\":\"" + voltage + "\", \"timestamp\":\"" + String(millis()) + "\" }";
+    client->send(message.c_str(), NULL, idMessage, 1000);
+    idMessage++; });
 
   handleSSEPing();
 
@@ -81,4 +88,13 @@ void handleReset(AsyncWebServerRequest *request)
 {
   request->send(200, "text/plain", "reset ok");
   ESP.restart();
+}
+
+void initLittleFS()
+{
+  if (!LittleFS.begin())
+  {
+    Serial.println("An error has occurred while mounting LittleFS");
+  }
+  Serial.println("LittleFS mounted successfully");
 }
