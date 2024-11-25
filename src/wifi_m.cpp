@@ -4,6 +4,7 @@
 
 #include "env_m.h"
 #include <wifi_m.h>
+#include "board_led_m.h"
 
 const char *ssid = STASSID;
 const char *password = STAPSK;
@@ -12,8 +13,8 @@ const char *passwordAP = APPSK;
 
 const char *mDnsName = M_DNS_NAME;
 
-const int retryDelay = 5000; // Delay between retries
-const int maxRetries = 30;   // Maximum connection retries
+const int retryDelay = 2000; // Delay between retries
+const int maxRetries = 10;   // Maximum connection retries
 unsigned long previousMillis = 0;
 const unsigned long interval = 10000; // Interval for checking connection status
 
@@ -45,23 +46,25 @@ void connectToWiFi()
     if (millis() - startAttemptTime >= retryDelay)
     {
       retryCount++;
-      Serial.print(".");
+      Serial.print(" ");
+      Serial.print(retryCount);
+
       startAttemptTime = millis(); // Reset timer for next attempt
 
       if (retryCount >= maxRetries)
       {
         Serial.println();
         Serial.println("Max retries reached. Could not connect to Wi-Fi.");
-        return;
+        ESP.restart();
       }
     }
     yield(); // Let other tasks run while retrying
   }
 
-  Serial.println();
   Serial.println("Wi-Fi connected!");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+  Serial.println();
 }
 
 void mDnsStart()
@@ -83,7 +86,7 @@ void checkRSSI()
   if (WiFi.status() != WL_CONNECTED)
     return;
 
-  long rssi = WiFi.RSSI();
+  int rssi = WiFi.RSSI();
   Serial.print("Wi-Fi Signal Strength (RSSI): ");
   Serial.print(rssi);
   Serial.println(" dBm");
@@ -98,10 +101,13 @@ void checkRSSI()
 void wifiSetup()
 {
   Serial.println("WiFi start");
-  
+  // 1. if (!ssid || !password) => softAp mode => esp scan network => user connect to esp => get available router names
+  // 2. if wifi sta couldn`t connect to router => app show error and wifi softAp on => p.1
+  // 3.
+
   connectToWiFi();
 
-  if (WiFi.status() != WL_CONNECTED)
+  if (WiFi.status() != WL_CONNECTED) // && (!ssid || !password)
   {
     startAPMode();
   }
