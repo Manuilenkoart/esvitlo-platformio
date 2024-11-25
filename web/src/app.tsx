@@ -1,10 +1,32 @@
-import { useState } from 'preact/hooks'
-import preactLogo from './assets/preact.svg'
-import viteLogo from '/vite.svg'
-import './app.css'
+import { useEffect, useState } from "preact/hooks";
+import preactLogo from "./assets/preact.svg";
+import viteLogo from "/vite.svg";
+import "./app.css";
 
+type Ping = {
+  name: "open" | "ping" | "error";
+  id: string;
+  voltage: "ON" | "OFF";
+  timestamp: string;
+};
 export function App() {
-  const [count, setCount] = useState(0)
+  const [ping, setPing] = useState<Ping | null>(null);
+
+  useEffect(() => {
+    const sse = new EventSource("/events");
+
+    sse.addEventListener("open", (e) => {
+      console.log(e);
+    });
+
+    sse.addEventListener("ping", (e) => {
+      const json = JSON.parse(e.data);
+      setPing(json);
+    });
+    sse.addEventListener("error", (e) => {
+      console.error(e);
+    });
+  }, []);
 
   return (
     <>
@@ -16,28 +38,8 @@ export function App() {
           <img src={preactLogo} class="logo preact" alt="Preact logo" />
         </a>
       </div>
-      <h1>Vite + Preact</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/app.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p>
-        Check out{' '}
-        <a
-          href="https://preactjs.com/guide/v10/getting-started#create-a-vite-powered-preact-app"
-          target="_blank"
-        >
-          create-preact
-        </a>
-        , the official Preact + Vite starter
-      </p>
-      <p class="read-the-docs">
-        Click on the Vite and Preact logos to learn more
-      </p>
+      <h1>ping: {ping?.id}</h1>
+      <h1>voltage: {ping?.voltage}</h1>
     </>
-  )
+  );
 }
