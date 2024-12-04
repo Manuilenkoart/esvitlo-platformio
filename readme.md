@@ -33,3 +33,5 @@
 #define WS_CLIENTS_TIMEOUT 1000 * 60 * 3
 #endif
 ```
+
+>spa update make npm run build. code put into data folder

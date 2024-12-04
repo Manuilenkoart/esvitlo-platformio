@@ -2,3 +2,4 @@
 .vscode
 src/env_m.h
 web/node_modules
+data/*

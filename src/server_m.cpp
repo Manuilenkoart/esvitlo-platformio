@@ -74,7 +74,8 @@ void handleSSEPing()
   ticker.attach(1, []()
                 {
     const char *voltage = hasPower ? "ON" : "OFF";
-    String message = "{ \"name\":\"ping\", \"id\":\"" + String(idMessage) + "\", \"voltage\":\"" + voltage + "\", \"timestamp\":\"" + String(millis()) + "\" }";
+    int rssi = WiFi.RSSI();
+    String message = "{ \"name\":\"ping\", \"id\":\"" + String(idMessage) + "\", \"voltage\":\"" + voltage + "\", \"rssi\":\"" + String(rssi) + "\" }";
     events.send(message.c_str(), "ping", idMessage, 1000);
     idMessage++; });
 }
