@@ -60,27 +60,18 @@ void checkRSSI()
 
 void mDnsStart()
 {
-  // if (!MDNS.begin("esvitlo")) 
-  // {
-  //   Serial.println("Error setting up MDNS responder!");
-  //   while (1)
-  //   {
+  // if (!MDNS.begin("esvitlo")) {
+  //   Serial.println("Помилка налаштування mDNS");
+  //   while (1) {
   //     delay(1000);
   //   }
   // }
-  // Serial.println("mDNS responder started");
-  // MDNS.addService("http", "tcp", PORT_HTTP);
-  // int totalTry = 5;
-  //   while (!MDNS.begin("esvitlo") && totalTry > 0) {
-  //       Serial.println(".");
-  //       delay(1000);
-  //       totalTry--;
-  //   }
 
-  //   Serial.println("[Wifi] mDNS responder started");
-  //   Serial.print("[Wifi] You can now connect to: http://");
-  //   Serial.print("esvitlo");
-  //   Serial.println(".local");
+  // MDNS.addService("http", "tcp", PORT_HTTP);
+
+  // Serial.print("[Wifi] You can now connect to: http://");
+  // Serial.print("esvitlo");
+  // Serial.println(".local");
 }
 
 void wifiSetup()
