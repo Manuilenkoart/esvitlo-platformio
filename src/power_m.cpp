@@ -21,15 +21,15 @@ void powerManagementSetup()
   attachInterrupt(digitalPinToInterrupt(checkVoltagePin), interruptChange, CHANGE);
 }
 
-void powerManagementLoop(void (*setDataSEE)(bool))
+void powerManagementLoop(void (*telegramSendMessage)(bool))
 {
   static bool lastVoltageState = hasVoltageVolatile;
 
-  setDataSEE(hasVoltageVolatile);
+  telegramSendMessage(hasVoltageVolatile);
 
   if (hasVoltageVolatile != lastVoltageState)
   {
-    setDataSEE(hasVoltageVolatile);
+    telegramSendMessage(hasVoltageVolatile);
 
     boardLedUpdate(hasVoltageVolatile);
 

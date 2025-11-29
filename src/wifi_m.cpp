@@ -1,17 +1,13 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <ESPmDNS.h>
 
 #include "env_m.h"
 #include <wifi_m.h>
-#include "board_led_m.h"
 
 const char *ssid = STASSID;
 const char *password = STAPSK;
 const char *ssidAP = APSSID;
 const char *passwordAP = APPSK;
-
-const char *mDnsName = M_DNS_NAME;
 
 const int retryDelay = 2000; // Delay between retries
 const int maxRetries = 10;   // Maximum connection retries
@@ -67,20 +63,6 @@ void connectToWiFi()
   Serial.println();
 }
 
-void mDnsStart()
-{
-  if (!MDNS.begin(mDnsName))
-  {
-    Serial.println("Error setting up MDNS responder");
-  }
-  Serial.print("mDNS responder started: ");
-  Serial.print(mDnsName);
-  Serial.println(".local");
-
-  MDNS.addService("http", "tcp", PORT_HTTP);
-  // MDNS.addService("ws", "tcp", PORT_WS);
-}
-
 void checkRSSI()
 {
   if (WiFi.status() != WL_CONNECTED)
@@ -112,13 +94,11 @@ void wifiSetup()
     startAPMode();
   }
 
-  mDnsStart();
   checkRSSI();
 }
 
 void wifiLoop()
 {
-  // MDNS.update();
 
   unsigned long currentMillis = millis();
 
