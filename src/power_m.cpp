@@ -11,12 +11,13 @@ void IRAM_ATTR interruptChange()
   hasVoltageVolatile = digitalRead(checkVoltagePin);
 }
 
-void powerManagementSetup()
+void powerManagementSetup(void (*telegramSendMessage)(bool))
 {
   pinMode(checkVoltagePin, INPUT);
 
   hasVoltageVolatile = digitalRead(checkVoltagePin);
   boardLedUpdate(hasVoltageVolatile);
+  telegramSendMessage(hasVoltageVolatile);
 
   attachInterrupt(digitalPinToInterrupt(checkVoltagePin), interruptChange, CHANGE);
 }
@@ -24,8 +25,6 @@ void powerManagementSetup()
 void powerManagementLoop(void (*telegramSendMessage)(bool))
 {
   static bool lastVoltageState = hasVoltageVolatile;
-
-  telegramSendMessage(hasVoltageVolatile);
 
   if (hasVoltageVolatile != lastVoltageState)
   {

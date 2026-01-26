@@ -95,6 +95,7 @@ void wifiSetup()
   }
 
   checkRSSI();
+  Serial.println(WiFi.localIP());
 }
 
 void wifiLoop()

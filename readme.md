@@ -13,6 +13,9 @@
 #define  APPSK  ""
 
 #define  M_DNS_NAME ""
+#define  TELEGRAM_BOT_TOKEN ""
+#define  TELEGRAM_CHAT_ALLOW_IDS ""
+
 #endif
 ```
 

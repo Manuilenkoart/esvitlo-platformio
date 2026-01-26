@@ -1,8 +1,7 @@
 #include <Arduino.h>
-
 #include "wifi_m.h"
 #include "board_led_m.h"
-#include "telegram_m.h"
+#include "t_bot_m.h"
 #include "power_m.h"
 #include "ota_m.h"
 
@@ -20,7 +19,8 @@ void setup()
 
   wifiSetup();
   boardLedSetup();
-  powerManagementSetup();
+  setupTelegramBot();
+  powerManagementSetup(telegramSendMessage);
   otaSetup();
 }
 
